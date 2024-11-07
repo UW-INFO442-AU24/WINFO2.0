@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+}
+
+.book-border {
+    border: black;
+    border-radius: 8px;
+    width: 20%;
+    height: 40%;
+}

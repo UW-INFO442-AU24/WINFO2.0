@@ -2,7 +2,7 @@ import React from 'react'
 
 const Book = () => {
   return (
-    <div>Book</div>
+    <div className="book-border"></div>
   )
 }
 
