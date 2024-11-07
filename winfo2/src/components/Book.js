@@ -19,7 +19,7 @@ const Book = () => {
   return (
     <div>
       <div className="book-border">
-        <Document file="fullbook.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+        <Document file="book.pdf" onLoadSuccess={onDocumentLoadSuccess}>
           <Page pageNumber={pageNumber} />
         </Document>
         <p>
