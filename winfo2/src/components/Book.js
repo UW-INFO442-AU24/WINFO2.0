@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 const Book = () => {
   const [numPages, setNumPages] = useState(null);
@@ -20,15 +19,15 @@ const Book = () => {
     <div>
       <div className="book-border">
         <Document file="book.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-          <Page pageNumber={pageNumber} />
+          <Page pageNumber={pageNumber} scale={1.2} />
         </Document>
-        <p>
+      </div>
+      <p>
           Page {pageNumber} of {numPages}
         </p>
         <button className="turn-page" onClick={goToNextPage} disabled={pageNumber >= numPages}>
           Next
         </button>
-      </div>
     </div>
   );
 };
