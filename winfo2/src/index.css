@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+}
+
+.navbar {
+    background-color: #D9D9D9;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    top: 0;  
+    text-decoration: none;
+    z-index: 1;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1.nav-title{
+    font-size: 1.5em;
+    margin-right: auto;
+    margin-left: 20px;
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.nav-link {
+    text-decoration: none; 
+    margin-left: 20px; 
+    margin-right: 20px;
+}
+
+.nav-title a {
+    text-decoration: none;
+}
