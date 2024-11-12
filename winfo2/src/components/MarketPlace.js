@@ -22,7 +22,11 @@ const Marketplace = () => {
     { id: 7, name: 'Blue Denim Skirt', category: 'bottoms', image: '/img/denimSkirt.png' }, 
     { id: 8, name: 'Green Camo Skirt', category: 'bottoms', image: '/img/camoSkirt.png' }, 
     { id: 9, name: 'Fluffy Brown Boots', category: 'shoes', image: '/img/fluffyBoots.png' },
-    { id: 10, name: 'Black Sunglasses', category: 'accessories', image: '/img/sunglasses.png' }
+    { id: 10, name: 'Black Sunglasses', category: 'accessories', image: '/img/sunglasses.png' }, 
+    { id: 11, name: 'Red Hat', category: 'accessories', image: '/img/redCap.png' }, 
+    { id: 12, name: 'Gold Necklace', category: 'accessories', image: '/img/necklace.png' },
+    { id: 13, name: 'Light Wash Jeans', category: 'bottoms', image: '/img/lightWash.png' },
+    { id: 14, name: 'Orange T-shirt', category: 'tops', image: '/img/shirt.png' }
   ];
 
   // Filter items based on search query and category filter
