@@ -19,7 +19,7 @@ const Marketplace = () => {
     { id: 4, name: 'Platform High Heels', category: 'shoes', image: '/img/platform.png' },
     { id: 5, name: 'White Trench Coat', category: 'coats', image: '/img/trench.png' }, 
     { id: 6, name: 'Miami Off-shoulder Top', category: 'tops', image: '/img/miami.png' },
-    { id: 7, name: 'Blue Demim Skirt', category: 'bottoms', image: '/img/denimSkirt.png' }, 
+    { id: 7, name: 'Blue Denim Skirt', category: 'bottoms', image: '/img/denimSkirt.png' }, 
     { id: 8, name: 'Green Camo Skirt', category: 'bottoms', image: '/img/camoSkirt.png' }, 
     { id: 9, name: 'Fluffy Brown Boots', category: 'shoes', image: '/img/fluffyBoots.png' },
     { id: 10, name: 'Black Sunglasses', category: 'accessories', image: '/img/sunglasses.png' }
