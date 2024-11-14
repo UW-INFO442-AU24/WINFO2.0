@@ -11,7 +11,7 @@ const NavBar = () => {
   const handleSignOut = () => {
     signOut(getAuth())
       .then(() => {
-        setIsMenuOpen(false);  // Close the menu after sign out
+        setIsMenuOpen(false);
         window.alert("Signed Out");
         navigate('/');
       })
@@ -21,7 +21,7 @@ const NavBar = () => {
   };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); 
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const navbarClassName = isMenuOpen ? 'navbar-nav show' : 'navbar-nav';
@@ -34,7 +34,6 @@ const NavBar = () => {
             <img src="/book/book_images/logo.png" alt="logo" />
           </a>
 
-          {/* Hamburger Menu Button (For small screens) */}
           <button
             className="navbar-toggler"
             type="button"
@@ -45,7 +44,6 @@ const NavBar = () => {
             <FontAwesomeIcon icon={faBars} />
           </button>
 
-          {/* Navbar Links */}
           <div className={navbarClassName} id="navbarSupportedContent">
             <ul className="navbar-nav">
               <li className="nav-item">
@@ -54,7 +52,7 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/Book" className="nav-link" onClick={toggleMenu}>
+                <NavLink to="/Book/" className="nav-link" onClick={toggleMenu}>
                   Book
                 </NavLink>
               </li>
@@ -73,22 +71,20 @@ const NavBar = () => {
                   Market Place
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/Profile" className="nav-link" onClick={toggleMenu}>
-                  Profile
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <button className="nav-link btn sign-in-btn" onClick={handleSignOut}>
-                  Sign Out
-                </button>
-              </li>
             </ul>
           </div>
+
+          <button
+            className="profile-btn"
+            onClick={() => navigate('/Profile')}
+            aria-label="Go to Profile page"
+          >
+            <img src="/book/book_images/user.png" alt="User" />
+          </button>
         </div>
       </nav>
     </header>
   );
-}
+};
 
 export default NavBar;
