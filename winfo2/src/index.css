@@ -13,7 +13,7 @@ body {
     justify-content: center; 
     align-items: center; 
     flex-direction: column; 
-    height: 100vh;
+    height: 110vh;
     padding-bottom: 30px; 
 }
 
@@ -53,12 +53,8 @@ body {
 .save-button:hover {
     background-color: #555;
 }
-  
-.page-number {
-    margin-top: 10px; 
-    text-align: center; 
-}
-  
+
+/* Book Border */
 .book-border {
     background-color: #d9d9d9;
     border-radius: 6px;
@@ -70,6 +66,12 @@ body {
     overflow: hidden;
 }
 
+.page-number {
+    margin-top: 10px; 
+    text-align: center; 
+}
+
+/* Title Styling */
 .giver-header {
     background-color: white;
     padding: 10px 20px;
@@ -112,6 +114,7 @@ body {
     transform: scale(1.1);
 }
 
+/* Star Icon (Bookmark) */
 .star-icon path {
     stroke: black; 
     stroke-width: 2; 
@@ -131,6 +134,7 @@ body {
     transform: scale(1.1); 
 }
 
+/* Arrow Buttons */
 .page-navigation {
     display: flex;
     justify-content: center;
@@ -288,6 +292,7 @@ header {
     }
 
 }
+
 /* Responsive design for smaller screens */
 @media (max-width: 992px) {
     .profile-btn {
