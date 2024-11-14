@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
-// import "react-pdf-highlighter/dist/style.css";
 import ProgressBar from './ProgressBar';
 
 const Book = () => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [starChecked, setStarChecked] = useState(false);
+  const [starChecked, setStarChecked] = useState({});
   const [showNotebook, setShowNotebook] = useState(false);
   const [notes, setNotes] = useState("");
 
@@ -21,7 +20,10 @@ const Book = () => {
   }
 
   function handleStarClick() {
-    setStarChecked(!starChecked);
+    setStarChecked((prevStarChecked) => ({
+      ...prevStarChecked,
+      [pageNumber]: !prevStarChecked[pageNumber] // Toggle bookmark for the current page
+    }));
   }
 
   function toggleNotebook() {
@@ -51,13 +53,13 @@ const Book = () => {
               type="checkbox"
               id="star"
               className="star-checkbox"
-              checked={starChecked}
+              checked={starChecked[pageNumber] || false} // Check if current page is bookmarked
               onChange={handleStarClick}
             />
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" className="star-icon">
               <path
                 d="M12 .587l3.668 7.431 8.184 1.19-5.91 5.65 1.394 8.146L12 18.897l-7.335 3.85 1.394-8.146-5.910-5.65 8.184-1.19z"
-                fill={starChecked ? 'yellow' : 'none'}
+                fill={starChecked[pageNumber] ? 'yellow' : 'none'}
               />
             </svg>
           </label>
@@ -100,7 +102,7 @@ const Book = () => {
         <button
           className="arrow-btn right-arrow"
           aria-label="Next Page"
-          onClick={() => setPageNumber(pageNumber + 1)}
+          onClick={goToNextPage}
           disabled={pageNumber === numPages}
         >
           <img src="/book/book_images/right-arrow.png" alt="Right Arrow" />

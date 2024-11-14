@@ -52,7 +52,7 @@ const NavBar = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/Book" className="nav-link" onClick={toggleMenu}>
+                <NavLink to="/Book/" className="nav-link" onClick={toggleMenu}>
                   Book
                 </NavLink>
               </li>
