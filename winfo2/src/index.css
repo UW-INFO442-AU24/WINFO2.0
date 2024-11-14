@@ -161,6 +161,16 @@ header {
     background-color: rgb(212, 212, 212);
 }
 
+.navbar-title {
+    font-family: 'Tiny5', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    color: black;
+    margin-left: 20px; 
+    flex-grow: 1;
+    text-align: left;
+}
+
 .navbar {
     display: flex;
     justify-content: flex-start;
@@ -186,8 +196,8 @@ header {
 }
 
 .navbar img {
-    width: 87px;
-    height: 87px;
+    width: 80px;
+    height: 80px;
 }
 
 .navbar-nav {
@@ -233,6 +243,7 @@ header {
     cursor: pointer;
     margin-left: auto;
     padding-right: 50px;
+    padding-left: 20px; 
 }
 
 .profile-btn img {
@@ -307,26 +318,45 @@ header {
         transform: translateY(-50%);
         z-index: 20;
     }
-  
+
     .navbar-nav {
         display: none;
-        position: absolute; 
+        position: absolute;
         top: 100%; 
         left: 0;
         width: 100%;
-        background-color: rgba(212, 212, 212, 0.9); 
+        background-color: rgba(212, 212, 212, 0.9);
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        padding: 0; 
         z-index: 15;
+        margin-top: 0; 
     }
-  
+
     .navbar-nav.show {
         display: flex;
     }
-  
+
     .navbar-nav .nav-item {
         width: 100%;
         text-align: center;
     }
+
+    .navbar-nav .nav-link {
+        padding: 10px 20px;
+        text-align: left;
+    }
+}
+
+/* Vertical Nav Bar Styling */
+.navbar-nav.vertical-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0; 
+}
+
+.navbar-nav.vertical-nav .nav-item {
+    text-align: center;
+    margin: 0; 
 }
