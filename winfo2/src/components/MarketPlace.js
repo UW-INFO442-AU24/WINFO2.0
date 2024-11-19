@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NavBar from './NavBar'; 
 
 const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,20 +14,20 @@ const Marketplace = () => {
   };
 
   const items = [
-    { id: 1, name: 'Cow Costume', category: 'all', image: '/img/cow.png' },
-    { id: 2, name: 'Purple Sneakers', category: 'shoes', image: '/img/purple.png' },
-    { id: 3, name: 'Star Tank', category: 'tops', image: '/img/tank.png' },
-    { id: 4, name: 'Platform High Heels', category: 'shoes', image: '/img/platform.png' },
-    { id: 5, name: 'White Trench Coat', category: 'coats', image: '/img/trench.png' }, 
-    { id: 6, name: 'Miami Off-shoulder Top', category: 'tops', image: '/img/miami.png' },
-    { id: 7, name: 'Blue Denim Skirt', category: 'bottoms', image: '/img/denimSkirt.png' }, 
-    { id: 8, name: 'Green Camo Skirt', category: 'bottoms', image: '/img/camoSkirt.png' }, 
-    { id: 9, name: 'Fluffy Brown Boots', category: 'shoes', image: '/img/fluffyBoots.png' },
-    { id: 10, name: 'Black Sunglasses', category: 'accessories', image: '/img/sunglasses.png' }, 
-    { id: 11, name: 'Red Hat', category: 'accessories', image: '/img/redCap.png' }, 
-    { id: 12, name: 'Gold Necklace', category: 'accessories', image: '/img/necklace.png' },
-    { id: 13, name: 'Light Wash Jeans', category: 'bottoms', image: '/img/lightWash.png' },
-    { id: 14, name: 'Orange T-shirt', category: 'tops', image: '/img/shirt.png' }
+    { id: 1, name: 'Cow Costume', category: 'all', image: '/img/cow.png', points: 100 },
+    { id: 2, name: 'Purple Sneakers', category: 'shoes', image: '/img/purple.png', points: 12 },
+    { id: 3, name: 'Star Tank', category: 'tops', image: '/img/tank.png', points: 10 },
+    { id: 4, name: 'Platform High Heels', category: 'shoes', image: '/img/platform.png', points: 12 },
+    { id: 5, name: 'White Trench Coat', category: 'coats', image: '/img/trench.png', points: 18 }, 
+    { id: 6, name: 'Miami Off-shoulder Top', category: 'tops', image: '/img/miami.png', points: 10 },
+    { id: 7, name: 'Blue Denim Skirt', category: 'bottoms', image: '/img/denimSkirt.png', points: 12 }, 
+    { id: 8, name: 'Green Camo Skirt', category: 'bottoms', image: '/img/camoSkirt.png', points: 12 }, 
+    { id: 9, name: 'Fluffy Brown Boots', category: 'shoes', image: '/img/fluffyBoots.png', points: 15 },
+    { id: 10, name: 'Black Sunglasses', category: 'accessories', image: '/img/sunglasses.png', points: 8 }, 
+    { id: 11, name: 'Red Hat', category: 'accessories', image: '/img/redCap.png', points: 10 }, 
+    { id: 12, name: 'Gold Necklace', category: 'accessories', image: '/img/necklace.png', points: 9 },
+    { id: 13, name: 'Light Wash Jeans', category: 'bottoms', image: '/img/lightWash.png', points: 15 },
+    { id: 14, name: 'Orange T-shirt', category: 'tops', image: '/img/shirt.png', points: 12}
   ];
 
   // Filter items based on search query and category filter
@@ -38,6 +39,7 @@ const Marketplace = () => {
 
   return (
     <div>
+      <NavBar/>
       <h1>Marketplace</h1>
       <header className="shop-header">
         <h2>Category</h2>
@@ -90,6 +92,7 @@ const Marketplace = () => {
                   <li key={item.id} className="item" data-category={item.category}>
                     <img className="purchase-item" src={item.image} alt={item.name} />
                     <span className="item-name">{item.name}</span>
+                    <span className="item-points">{item.points}</span> {}
                   </li>
                 ))
               ) : (

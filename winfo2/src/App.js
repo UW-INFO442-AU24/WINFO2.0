@@ -5,7 +5,7 @@
 // import Home from './components/Home/Home.js';
 // import Inventory from './components/Invnetory/Inventory.js';
 import MarketPlace from './components/MarketPlace.js';
-// import NavBar from './components/NavBar/NavBar.js';
+import NavBar from './components//NavBar.js';
 // import Profile from './components/Profile/Profile.js';
 // import ProgressBar from './components/ProgressBar/ProgressBar.js';
 // import Quiz from './components/Quiz/Quiz.js';
@@ -19,7 +19,7 @@ export default function App(props) {
             
           <Route path="/" element={<Navigate to="/MarketPlace" />} />
           <Route path="/MarketPlace" element={<MarketPlace/>} />
-      
+          <Route path="/NavBar" element={<NavBar/>} />
           </Routes>
         </Router> 
       </div>
