@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import ProgressBar from './ProgressBar';
+import Footer from './Footer';
 
 const Book = () => {
   const [numPages, setNumPages] = useState(null);
@@ -108,6 +109,8 @@ const Book = () => {
           <img src="/book/book_images/right-arrow.png" alt="Right Arrow" />
         </button>
       </div>
+
+      <Footer />
 
     </div>
   );
