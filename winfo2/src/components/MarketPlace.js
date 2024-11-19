@@ -3,7 +3,9 @@ import NavBar from './NavBar';
 
 const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all'); // To track selected category
+  const [categoryFilter, setCategoryFilter] = useState('all'); 
+  const [cart, setCart] = useState([]); 
+  const [userPoints, setUserPoints] = useState(50);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -12,6 +14,16 @@ const Marketplace = () => {
   const handleCategoryClick = (category) => {
     setCategoryFilter(category);
   };
+
+  const handleAddToCart = (item) => {
+    setCart((prevCart) => [...prevCart, item]);
+  };
+
+    // Calculate total points spent based on the items in the cart
+    const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
+
+    // Calculate the remaining points the user has
+    const remainingPoints = userPoints - totalPointsSpent;
 
   const items = [
     { id: 1, name: 'Cow Costume', category: 'all', image: '/img/cow.png', points: 100 },
@@ -30,7 +42,6 @@ const Marketplace = () => {
     { id: 14, name: 'Orange T-shirt', category: 'tops', image: '/img/shirt.png', points: 12}
   ];
 
-  // Filter items based on search query and category filter
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
@@ -46,7 +57,12 @@ const Marketplace = () => {
 
         <div className="cart-container">
           <img className="cart-icon" src="/img/cart.png" alt="Shopping Cart" />
-          <span className="cart-count">0</span>
+          <span className="cart-count">{cart.length}</span> {/* Display number of items in cart */}
+        </div>
+
+        <div className="user-points">
+          <h3>Avaliable Points: {userPoints}</h3> {/* Display the user's total points */}
+          <h4>Points Remaining: {remainingPoints}</h4> {/* Display remaining points after cart total */}
         </div>
 
         <div className="search-container">
@@ -92,7 +108,8 @@ const Marketplace = () => {
                   <li key={item.id} className="item" data-category={item.category}>
                     <img className="purchase-item" src={item.image} alt={item.name} />
                     <span className="item-name">{item.name}</span>
-                    <span className="item-points">{item.points}</span> {}
+                    <span className="item-points">{item.points}</span>
+                    <button onClick={() => handleAddToCart(item)}>+</button> {/* Add to cart button */}
                   </li>
                 ))
               ) : (
@@ -107,3 +124,4 @@ const Marketplace = () => {
 };
 
 export default Marketplace;
+
