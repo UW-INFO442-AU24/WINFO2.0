@@ -1,242 +1,166 @@
-\.character-building-container {
-  /* Full-screen layout, center everything */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px; /* Increased space between containers */
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
-  font-family: 'Tiny5', sans-serif;
-  background: linear-gradient(135deg, #78b3ff, #4a90e2); /* Gradient background */
-  color: #333;
-  padding: 30px; /* Increased padding for better spacing */
-  margin: 0; /* Remove extra margin */
-  box-sizing: border-box; /* Ensure padding is included in dimensions */
-}
+import React, { useState } from 'react';
+import { BeanHead } from 'beanheads';
+import './CharacterBuilding.css';
 
-.avatar-container {
-  /* Container for avatar preview and related information */
-  background-color: #f9f9f9;
-  border: 4px solid #78b3ff; /* Slightly thicker border */
-  border-radius: 20px; /* Increased border radius */
-  padding: 30px; /* Increased padding for better spacing */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
-  text-align: center;
-  height: auto; /* Allow height to adjust dynamically */
-  width: 550px; /* Fixed width */
-  display: flex;
-  flex-direction: column; /* Vertical alignment inside container */
-  justify-content: space-between; /* Align content vertically */
-}
+const defaultCustomization = {
+  accessory: 'none',
+  body: 'chest',
+  clothing: 'shirt',
+  clothingColor: 'white',
+  eyebrows: 'raised',
+  eyes: 'normal',
+  facialHair: 'none',
+  graphic: 'none',
+  hair: 'bald',
+  hairColor: 'black',
+  hat: 'none',
+  hatColor: 'green',
+  lashes: 'false',
+  lipColor: 'purple',
+  faceMask: false,
+  faceMaskColor: 'white',
+  mouth: 'grin',
+  skinTone: 'brown',
+};
 
-.avatar-preview {
-  /* Style for the avatar preview inside the avatar container */
-  width: 100%; /* Ensure the avatar uses the container width */
-  max-width: 700px; /* Set a larger max-width */
-  margin: 0 auto;
-  text-align: center;
-  transform: scale(1.1); /* Slightly scaled up for better visibility */
-  margin-bottom: 40px; /* Added space below the avatar preview */
-}
+const CharacterBuilding = () => {
+  const [customization, setCustomization] = useState(defaultCustomization);
+  const [activeTab, setActiveTab] = useState('Appearance');
+  const [wallet, setWallet] = useState(100000);
+  const [unlockedItems, setUnlockedItems] = useState({
+    hairColor: ['black', 'brown'],
+    clothing: ['shirt', 'vneck'],
+    clothingColor: ['white'],
+    graphic: ['none'],
+    accessory: ['none'],
+    hat: ['none'],
+    hair: ['bald', 'long', 'short'],
+  });
 
-.avatar-header {
-  /* Header for the avatar section */
-  margin-bottom: 0px; /* Increased spacing below header */
-  font-size: 50px; /* Increased font size */
-  font-family: 'Tiny5', sans-serif;
-  color: #196edd;
-}
+  const handleCustomizationChange = (key, value) => {
+    setCustomization((prev) => ({
+      ...prev,
+      [key]: value, // Update customization state for the given key
+    }));
+  };
 
-.wallet {
-  /* Wallet title styling */
-  font-size: 32px; /* Increased font size */
-  font-weight: bold;
-  color: #196edd;
-  margin-top: 20px; /* Increased top margin */
-}
+  const resetCustomization = () => {
+    setCustomization(defaultCustomization);
+  };
 
-.wallet-info {
-  /* Wallet details section with flex alignment */
-  font-size: 30px; /* Larger font size */
-  font-weight: bold; /* Make it bold */
-  color: #196edd; /* Match theme color */
-  margin-top: 40px; /* Increased margin to add more space between wallet and avatar */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px; /* Increased spacing between emoji and text */
-}
+  const handleSaveAvatar = () => {
+    console.log('Avatar customization saved:', customization);
+  };
 
-.wallet-info span {
-  /* Style for the emoji in wallet info */
-  font-size: 30px; /* Larger emoji */
-}
+  const handleUnlock = (category, item) => {
+    const itemCost = 100; // Cost to unlock any item
+    if (wallet >= itemCost && !unlockedItems[category]?.includes(item)) {
+      setWallet(wallet - itemCost);
+      setUnlockedItems((prev) => ({
+        ...prev,
+        [category]: [...(prev[category] || []), item],
+      }));
+    }
+  };
 
-.customization-panel {
-  /* Container for customization options */
-  background-color: #f9f9f9;
-  padding: 30px; /* Increased padding for better spacing */
-  border-radius: 20px; /* Increased border radius */
-  border: 4px solid #78b3ff; /* Slightly thicker border */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
-  width: 900px; /* Increased width */
-  height: 830px; /* Increased height */
-  overflow-y: auto; /* Allow scrolling if necessary */
-}
+  const tabs = {
+    Appearance: [
+      { label: 'Body', key: 'body', options: ['chest', 'breasts'] },
+      { label: 'Skin Tone', key: 'skinTone', options: ['light', 'yellow', 'brown', 'dark', 'red', 'black'] },
+    ],
+    Eyes: [
+      { label: 'Eyebrows', key: 'eyebrows', options: ['raised', 'leftLowered', 'serious', 'angry', 'concerned'] },
+      { label: 'Eyes', key: 'eyes', options: ['normal', 'leftTwitch', 'happy', 'content', 'squint', 'simple', 'dizzy', 'wink', 'heart'] },
+      { label: 'Lashes', key: 'lashes', options: ['true', 'false'] },
+    ],
+    Lips: [
+      { label: 'Mouth', key: 'mouth', options: ['grin', 'sad', 'openSmile', 'lips', 'open', 'serious', 'tongue'] },
+      { label: 'Lip Color', key: 'lipColor', options: ['red', 'purple', 'pink', 'green'] },
+    ],
+    Hair: [
+      { label: 'Hair', key: 'hair', options: ['bald', 'long', 'short', 'bun', 'pixie', 'balding', 'buzz', 'afro', 'bob'] },
+      { label: 'Hair Color', key: 'hairColor', options: ['black', 'brown', 'blonde', 'red', 'blue', 'pink'] },
+      { label: 'Facial Hair', key: 'facialHair', options: ['none', 'stubble', 'mediumBeard'] },
+    ],
+    Clothing: [
+      { label: 'Clothing', key: 'clothing', options: ['shirt', 'vneck', 'dressShirt', 'tankTop', 'dress'] },
+      { label: 'Clothing Color', key: 'clothingColor', options: ['white', 'blue', 'black', 'green', 'red'] },
+      { label: 'Graphic', key: 'graphic', options: ['none', 'redwood', 'gatsby', 'vue', 'react', 'graphQL'] },
+    ],
+    Accessories: [
+      { label: 'Accessory', key: 'accessory', options: ['none', 'roundGlasses', 'tinyGlasses', 'shades'] },
+      { label: 'Hat', key: 'hat', options: ['none', 'beanie', 'turban'] },
+      { label: 'Hat Color', key: 'hatColor', options: ['white', 'blue', 'black', 'green', 'red'] },
+    ],
+    Extra: [
+      { label: 'Face Mask', key: 'faceMask', options: ['true', 'false'] },
+      { label: 'Face Mask Color', key: 'faceMaskColor', options: ['white', 'blue', 'black', 'green', 'red'] },
+    ],
+  };
 
-.tabs {
-  /* Style for tabs at the top of the customization panel */
-  display: flex;
-  gap: 10px; /* Increased spacing between buttons */
-  margin-bottom: 20px;
-  justify-content: center;
-}
+  return (
+    <div className="character-building-container">
+      <div className="avatar-container">
+        <div className="avatar-preview">
+          <h1 className="avatar-header">Avatar Preview</h1>
+          <BeanHead {...customization} mask={false} />
+        </div>
+        <div className="wallet-info">
+          <span role="img" aria-label="coin">💰</span>
+          Wallet Points: <strong>{wallet}</strong>
+        </div>
+        <div className="button-group">
+          <button onClick={resetCustomization} className="reset-button">Reset to Default</button>
+          <button onClick={handleSaveAvatar} className="save-avatar-button">Save Avatar</button>
+        </div>
+      </div>
 
-.tab-button {
-  /* Styling for tab buttons */
-  background: #fff;
-  border: 3px solid #78b3ff; /* Slightly thicker border */
-  padding: 15px 30px; /* Increased padding for a larger button */
-  border-radius: 8px; /* Increased border radius */
-  cursor: pointer;
-  font-family: 'Tiny5', sans-serif;
-  font-size: 18px; /* Slightly larger font size */
-  font-weight: bold;
-  transition: background 0.3s, color 0.3s;
-}
+      <div className="customization-panel">
+        <div className="tabs">
+          {Object.keys(tabs).map((tab) => (
+            <button
+              key={tab}
+              className={`tab-button ${activeTab === tab ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-.tab-button.active {
-  /* Style for active tab button */
-  background: #196edd;
-  color: white;
-}
+        <div className="tab-content">
+          {tabs[activeTab].map(({ label, key, options }) => (
+            <div key={key} style={{ marginBottom: '10px' }}>
+              <h4>{label}</h4>
+              <div className="options-grid">
+                {options.map((option) => (
+                  <div
+                    key={option}
+                    className={`option ${
+                      customization[key] === option || unlockedItems[key]?.includes(option) ? 'selected' : ''
+                    }`}
+                    onClick={() =>
+                      unlockedItems[key]?.includes(option) || key === 'lashes' || key === 'faceMask'
+                        ? handleCustomizationChange(key, option)
+                        : null
+                    }
+                  >
+                    <span className={`option-preview ${key}-${option}`} />
+                    <p>{option}</p>
+                    {!unlockedItems[key]?.includes(option) && (
+                      <button className="unlock-button" onClick={() => handleUnlock(key, option)}>
+                        Unlock (100 Points)
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-.tab-button:hover {
-  /* Hover effect for tab buttons */
-  background: #78b3ff;
-  color: #fff;
-}
-
-.tab-content {
-  /* Content area for each tab */
-  margin-top: 20px;
-  height: 600px; /* Increased height to accommodate larger layout */
-  overflow-y: auto; /* Allow scrolling for overflow content */
-}
-
-.tab-content h4 {
-  /* Heading style for content inside tabs */
-  font-family: 'Tiny5', sans-serif;
-  font-size: 20px; /* Slightly larger font size */
-  font-weight: bold;
-  margin-bottom: 12px;
-  margin-left: 40px; /* Keep left margin for alignment */
-  color: #196edd;
-}
-
-.options-grid {
-  /* Grid layout for customization options */
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* Increased spacing between options */
-  margin-left: 40px; /* Keep left margin for alignment */
-  margin-bottom: 10px; /* Adjusted margin below */
-  margin-top: 10px;
-}
-
-.option {
-  /* Individual option card styling */
-  width: 120px; /* Increased width for better visibility */
-  height: 45px; /* Increased height */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align content to the left */
-  justify-content: center;
-  padding: 15px; /* Increased padding for better spacing */
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 8px; /* Increased border radius */
-  transition: border-color 0.3s;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.option:hover {
-  /* Hover effect for options */
-  transform: scale(1.15); /* Slightly larger scale */
-  border-color: #78b3ff;
-}
-
-.option.selected {
-  /* Style for selected option */
-  border-color: #196edd;
-  background: #d9ebff;
-}
-
-.unlock-button {
-  /* Unlock button styling */
-  background: #78b3ff;
-  color: white;
-  border: none;
-  padding: 8px 15px; /* Slightly larger padding */
-  border-radius: 6px; /* Slightly larger border radius */
-  cursor: pointer;
-  font-size: 16px; /* Slightly larger font size */
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.unlock-button:hover {
-  /* Hover effect for unlock button */
-  background: #196edd;
-}
-
-.button-group {
-  /* Container for the Reset and Save buttons */
-  display: flex;
-  justify-content: center; /* Center align the buttons */
-  gap: 20px; /* Space between the buttons */
-  margin-top: 20px; /* Add space above the button group */
-  margin-bottom: 10px; /* Add space below for aesthetics */
-}
-
-.reset-button {
-  /* Reset button styling */
-  background: #196edd;
-  color: white;
-  border: none;
-  padding: 12px 25px; /* Adjusted padding for consistency */
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.3s;
-  font-family: 'Tiny5', sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.reset-button:hover {
-  /* Hover effect for Reset button */
-  background: #78b3ff;
-  transform: scale(1.05);
-}
-
-.save-avatar-button {
-  /* Save Avatar button styling */
-  background: #78b3ff;
-  color: white;
-  border: none;
-  padding: 12px 25px; /* Adjusted padding for consistency */
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.3s;
-  font-family: 'Tiny5', sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.save-avatar-button:hover {
-  /* Hover effect for Save Avatar button */
-  background: #196edd;
-  transform: scale(1.05);
-}
-
+export default CharacterBuilding;
