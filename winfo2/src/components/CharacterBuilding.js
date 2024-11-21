@@ -15,9 +15,9 @@ const defaultCustomization = {
   hairColor: 'black',
   hat: 'none',
   hatColor: 'green',
-  lashes: 'false',
+  lashes: false, // Boolean for lashes
   lipColor: 'purple',
-  faceMask: false,
+  faceMask: false, // Boolean for faceMask
   faceMaskColor: 'white',
   mouth: 'grin',
   skinTone: 'brown',
@@ -28,19 +28,25 @@ const CharacterBuilding = () => {
   const [activeTab, setActiveTab] = useState('Appearance');
   const [wallet, setWallet] = useState(100000);
   const [unlockedItems, setUnlockedItems] = useState({
-    hairColor: ['black', 'brown'],
+    hairColor: ['black', 'brown','blonde'],
     clothing: ['shirt', 'vneck'],
     clothingColor: ['white'],
     graphic: ['none'],
     accessory: ['none'],
     hat: ['none'],
     hair: ['bald', 'long', 'short'],
+    body: ['chest','breasts'],
+    skinTone: ['light', 'yellow', 'brown', 'dark', 'red', 'black'],
+    eyes: ['normal', 'leftTwitch', 'happy', 'content'],
+    eyebrows: ['raised'],
+    mouth: ['grin', 'sad', 'openSmile'],
+    lashes: ['true','false'],
   });
 
   const handleCustomizationChange = (key, value) => {
     setCustomization((prev) => ({
       ...prev,
-      [key]: value, // Update customization state for the given key
+      [key]: key === 'faceMask' || key === 'lashes' ? value === 'true' : value, // Convert faceMask and lashes to boolean
     }));
   };
 
@@ -71,7 +77,7 @@ const CharacterBuilding = () => {
     Eyes: [
       { label: 'Eyebrows', key: 'eyebrows', options: ['raised', 'leftLowered', 'serious', 'angry', 'concerned'] },
       { label: 'Eyes', key: 'eyes', options: ['normal', 'leftTwitch', 'happy', 'content', 'squint', 'simple', 'dizzy', 'wink', 'heart'] },
-      { label: 'Lashes', key: 'lashes', options: ['true', 'false'] },
+      { label: 'Lashes', key: 'lashes', options: ['true', 'false'] }, // Lashes toggle
     ],
     Lips: [
       { label: 'Mouth', key: 'mouth', options: ['grin', 'sad', 'openSmile', 'lips', 'open', 'serious', 'tongue'] },
@@ -103,7 +109,7 @@ const CharacterBuilding = () => {
       <div className="avatar-container">
         <div className="avatar-preview">
           <h1 className="avatar-header">Avatar Preview</h1>
-          <BeanHead {...customization} mask={false} />
+          <BeanHead {...customization} mask={false} /> {/* Mask is always false */}
         </div>
         <div className="wallet-info">
           <span role="img" aria-label="coin">💰</span>
@@ -137,17 +143,13 @@ const CharacterBuilding = () => {
                   <div
                     key={option}
                     className={`option ${
-                      customization[key] === option || unlockedItems[key]?.includes(option) ? 'selected' : ''
+                      String(customization[key]) === option ? 'selected' : ''
                     }`}
-                    onClick={() =>
-                      unlockedItems[key]?.includes(option) || key === 'lashes' || key === 'faceMask'
-                        ? handleCustomizationChange(key, option)
-                        : null
-                    }
+                    onClick={() => handleCustomizationChange(key, option)}
                   >
                     <span className={`option-preview ${key}-${option}`} />
                     <p>{option}</p>
-                    {!unlockedItems[key]?.includes(option) && (
+                    {!unlockedItems[key]?.includes(option) && key !== 'faceMask' && key !== 'faceMaskColor' && (
                       <button className="unlock-button" onClick={() => handleUnlock(key, option)}>
                         Unlock (100 Points)
                       </button>
