@@ -332,6 +332,15 @@ footer {
 
 /* Responsive design for smaller screens */
 @media (max-width: 992px) {
+    .book-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        align-items: center; 
+        justify-content: space-between; 
+        height: 140vh;
+    }
+
     .profile-btn {
         display: none;
     }

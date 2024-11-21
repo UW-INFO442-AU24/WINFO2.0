@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { signOut, getAuth } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // This hook helps track the current location
 
   // Handle sign out
   const handleSignOut = () => {
@@ -26,12 +27,17 @@ const NavBar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Close menu when screen width is greater than 992px
+  // Close menu when screen width is greater than 992px or route changes
   const handleResize = () => {
     if (window.innerWidth > 992) {
       setIsMenuOpen(false); // Close the menu if the screen is wider than 992px
     }
   };
+
+  // Reset the menu state when the page changes
+  useEffect(() => {
+    setIsMenuOpen(false); // Hide menu when route changes
+  }, [location]);
 
   // Add event listener to window resize
   useEffect(() => {
