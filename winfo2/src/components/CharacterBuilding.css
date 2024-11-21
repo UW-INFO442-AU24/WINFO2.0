@@ -130,7 +130,7 @@
   font-size: 20px; /* Slightly larger font size */
   font-weight: bold;
   margin-bottom: 12px;
-  margin-left: 40px; /* Keep left margin for alignment */
+  margin-left: 20px; /* Keep left margin for alignment */
   color: #196edd;
 }
 
@@ -139,7 +139,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px; /* Increased spacing between options */
-  margin-left: 40px; /* Keep left margin for alignment */
+  margin-left: 20px; /* Keep left margin for alignment */
   margin-bottom: 10px; /* Adjusted margin below */
   margin-top: 10px;
 }
@@ -159,6 +159,15 @@
   transition: border-color 0.3s;
   margin-bottom: 10px;
   text-align: center;
+}
+
+.option p {
+  /* Style for text inside the option box */
+  margin-top: 40px; /* Add margin above the text */
+  margin-bottom: 0px;
+  text-align: center; /* Center-align text */
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .option:hover {
@@ -184,6 +193,7 @@
   font-size: 16px; /* Slightly larger font size */
   margin-top: 10px;
   font-weight: bold;
+  font-family: 'Tiny5', sans-serif;
 }
 
 .unlock-button:hover {
