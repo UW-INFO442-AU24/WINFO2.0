@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { getDatabase } from 'firebase/database';
 
 
 // Import the functions you need from the SDKs you need
@@ -22,7 +23,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-import { getDatabase } from 'firebase/database';
 const db = getDatabase();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
