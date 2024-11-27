@@ -35,7 +35,7 @@ export default function App(props) {
           <Route path="/Quiz" element={<Quiz />} />
           <Route path="/Profile" element={<Profile />} />
         </Routes>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </Router>
   );

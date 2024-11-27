@@ -110,8 +110,6 @@ const Book = () => {
         </button>
       </div>
 
-      <Footer />
-
     </div>
   );
 };

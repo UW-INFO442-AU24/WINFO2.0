@@ -25,3 +25,5 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+export { app, db };

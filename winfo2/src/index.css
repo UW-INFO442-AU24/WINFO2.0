@@ -87,7 +87,7 @@ html, body {
     text-align: center;
     font-size: 24px;
     color: #333;
-    padding-left: 125px;
+    padding-left: 150px;
 }
   
 .giver-buttons {
@@ -395,3 +395,140 @@ footer {
     text-align: center;
     margin: 0; 
 }
+
+/* Quiz Page Styling */
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    align-items: flex-start; 
+    padding: 20px;
+    gap: 20px; 
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: auto;
+}
+/*Override some styling just for the quiz page*/
+.quiz-pdf-container .book-border {
+    background-color: #d9d9d9;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 1000px; 
+    height: 100%; 
+    padding: 0px; 
+    border: 5px solid #aaa;
+    overflow-y: auto;
+    overflow-x: auto; 
+}
+
+.quiz-pdf-container {
+    width: 80%; 
+    max-width: 800px;
+    background-color: #f4f4f4;
+    border: 2px solid #aaa;
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: auto; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.quiz-container {
+    flex: 0 0 400px;
+    padding: 20px;
+    overflow-y: auto;
+    border: 5px solid #666565; 
+    background-color: #c4c1c1;
+    border-radius: 10px;
+    height: 500px;
+    width: 30%; 
+    margin-top: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.quiz-container.hidden {
+    display: none; 
+} 
+
+
+#chapter-title {
+    margin-top: 40px;
+}
+h1 {
+    text-align: center;
+}
+
+.question {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+#questions{
+    display: block;
+    margin: 10px 0;
+}
+
+
+#submit-button {
+    display: block;
+    width: 50%;
+    padding: 10px 20px;
+    margin: 80px auto 0;
+    background-color: #505451;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#submit-button:hover {
+    background-color: lightblue;
+}
+
+#submit-button:disabled{
+    display: none;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between; 
+    margin-top: 20px; 
+}
+
+.score-display{
+    display: flex;
+    background-color: #c4c1c1;
+    color: white;
+    width: 200px;
+    border: 5px solid #666565;
+    padding: 10px 20px;
+    border-radius: 15px;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.feedback-message .correct {
+    background-color: #d4edda;
+    text-align: center;
+    color: #155724;
+    justify-content: center;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+.feedback-message .incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
