@@ -1,49 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getDatabase, ref, set, get } from 'firebase/database';
 
 function SignInOut({ onSignIn, onSignOut, user }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Validate if email contains @ symbol and ends with .edu or .gov
+  const db = getDatabase();
+
+  // Function to sanitize the email to make it a valid Firebase path
+  const sanitizeEmail = (email) => {
+    return email.replace(/[.#$[\]]/g, '_'); // Replaces invalid characters with underscores
+  };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu|gov)$/;
     return emailRegex.test(email);
   };
 
-  // Check if email contains '@' symbol
   const containsAtSymbol = (email) => {
     return email.includes('@');
   };
 
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      onSignIn(savedUser);
+      setEmail(savedUser);
+    }
+    setLoading(false);
+  }, [onSignIn]);
+
   const handleSignIn = (e) => {
     e.preventDefault();
-
-    // Clear previous error message before starting validation
     setError('');
 
-    // Check for @ symbol first
     if (!containsAtSymbol(email)) {
       setError('Email must contain the "@" symbol');
-    }
-    // Then validate full email format if @ symbol exists
-    else if (!validateEmail(email)) {
+    } else if (!validateEmail(email)) {
       setError('Please enter a valid email address ending in .edu or .gov');
-    }
-    // If all validation passes, proceed with sign-in
-    else {
-      onSignIn(email);   // Set the user email in the parent component (Profile)
-      setEmail('');       // Clear the input box after sign-in
+    } else {
+      // Sanitize email to make it a valid path in Firebase
+      const sanitizedEmail = sanitizeEmail(email);
+
+      set(ref(db, 'users/' + sanitizedEmail), {
+        email: email,
+      })
+      .then(() => {
+        localStorage.setItem('user', email);
+        onSignIn(email);
+        setEmail('');
+      })
+      .catch((error) => {
+        console.error('Error writing new user to Firebase Database', error);
+      });
     }
   };
 
   const handleSignOut = () => {
-    onSignOut();         // Clear the user state in the parent component (Profile)
-    setEmail('');        // Clear the email input box
+    onSignOut();
+    localStorage.removeItem('user');
+    setEmail('');
   };
 
   return (
     <div>
-      {user ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : user ? (
         <div>
           <p>Signed in as: {user}</p>
           <button onClick={handleSignOut}>Sign Out</button>
