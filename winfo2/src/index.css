@@ -34,7 +34,7 @@ body {
     height: 700px;
     padding: 40px;
     border: 5px solid #aaa;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .giver-header {
