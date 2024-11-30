@@ -28,19 +28,19 @@ const CharacterBuilding = () => {
   const [activeTab, setActiveTab] = useState('Appearance');
   const [wallet, setWallet] = useState(100000);
   const [unlockedItems, setUnlockedItems] = useState({
-    hairColor: ['black', 'brown','blonde'],
+    hairColor: ['black', 'brown', 'blonde'],
     clothing: ['shirt', 'vneck'],
     clothingColor: ['white'],
     graphic: ['none'],
     accessory: ['none'],
     hat: ['none'],
     hair: ['bald', 'long', 'short'],
-    body: ['chest','breasts'],
+    body: ['chest', 'breasts'],
     skinTone: ['light', 'yellow', 'brown', 'dark', 'red', 'black'],
     eyes: ['normal', 'leftTwitch', 'happy', 'content'],
     eyebrows: ['raised'],
     mouth: ['grin', 'sad', 'openSmile'],
-    lashes: ['true','false'],
+    lashes: ['true', 'false'],
   });
 
   const handleCustomizationChange = (key, value) => {
