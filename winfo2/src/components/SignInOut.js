@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDatabase, ref, set, get, remove, onValue } from 'firebase/database';
+import { getDatabase, ref, set, get, remove } from 'firebase/database';
 
 function SignInOut({ onSignIn, onSignOut, user }) {
   const [email, setEmail] = useState('');
@@ -8,7 +8,6 @@ function SignInOut({ onSignIn, onSignOut, user }) {
 
   const db = getDatabase();
 
-  // Function to sanitize the email to make it a valid Firebase path
   const sanitizeEmail = (email) => email.replace(/[.#$[\]]/g, '_');
 
   const validateEmail = (email) => {
@@ -16,43 +15,29 @@ function SignInOut({ onSignIn, onSignOut, user }) {
     return emailRegex.test(email);
   };
 
-  const resetGuestData = async () => {
-    const guestRef = ref(db, 'users/guest');
-    try {
-      await remove(guestRef); // Remove guest data from Firebase
-      console.log('Guest data reset successfully!');
-    } catch (error) {
-      console.error('Error resetting guest data:', error);
-    }
-  };
-
-  const migrateGuestData = async (newUserId) => {
-    const guestRef = ref(db, 'users/guest');
+  const migrateUndefinedData = async (newUserId) => {
+    const undefinedRef = ref(db, 'users/undefined');
     const newUserRef = ref(db, `users/${newUserId}`);
 
     try {
-      const guestDataSnapshot = await get(guestRef);
-      if (guestDataSnapshot.exists()) {
-        const guestData = guestDataSnapshot.val();
-
-        // Save guest data to the new user ID
-        await set(newUserRef, guestData);
-
-        // Remove guest data
-        await remove(guestRef);
-        console.log('Guest data migrated successfully!');
+      const undefinedDataSnapshot = await get(undefinedRef);
+      if (undefinedDataSnapshot.exists()) {
+        const undefinedData = undefinedDataSnapshot.val();
+        await set(newUserRef, undefinedData);
+        await remove(undefinedRef);
+        console.log('Data migrated from undefined to new user ID successfully!');
       }
     } catch (error) {
-      console.error('Error migrating guest data:', error);
+      console.error('Error migrating undefined data:', error);
     }
   };
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      onSignIn(savedUser); // Set the saved user on load
+      onSignIn(savedUser);
     }
-    setLoading(false); // Stop showing loading spinner
+    setLoading(false);
   }, [onSignIn]);
 
   const handleSignIn = async (e) => {
@@ -65,39 +50,52 @@ function SignInOut({ onSignIn, onSignOut, user }) {
       setError('Please enter a valid email address ending in .edu or .gov');
     } else {
       const sanitizedEmail = sanitizeEmail(email);
+      await migrateUndefinedData(sanitizedEmail);
 
-      // Migrate guest data to the new user ID
-      await migrateGuestData(sanitizedEmail);
-
-      // Save the user's data under their sanitized email
       try {
         await set(ref(db, `users/${sanitizedEmail}/email`), email);
-        localStorage.setItem('user', email); // Store original email
-        onSignIn(email); // Pass the original email to parent
+        localStorage.setItem('user', email);
+        onSignIn(email);
         setEmail('');
+        console.log(`Signed in as ${email}`);
       } catch (error) {
         console.error('Error writing new user to Firebase Database', error);
       }
     }
   };
 
-  const handleSignOut = () => {
-    resetGuestData(); // Reset guest data on sign-out
-    onSignOut();
-    localStorage.removeItem('user'); // Clear the user from local storage
-    setEmail('');
+  const handleSignOut = async () => {
+    const currentUserId = sanitizeEmail(user);
+
+    try {
+      const currentUserRef = ref(db, `users/${currentUserId}`);
+      const undefinedRef = ref(db, 'users/undefined');
+
+      const currentUserDataSnapshot = await get(currentUserRef);
+      if (currentUserDataSnapshot.exists()) {
+        const currentUserData = currentUserDataSnapshot.val();
+        await set(undefinedRef, currentUserData);
+        await remove(currentUserRef);
+      }
+
+      localStorage.setItem('user', 'undefined');
+      onSignOut();
+      console.log('Signed out successfully.');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
     <div>
       {loading ? (
         <p>Loading...</p>
-      ) : user && user !== 'guest' ? ( // If user is signed in
+      ) : user && user !== 'undefined' ? (
         <div>
           <p>Signed in as: {user}</p>
           <button onClick={handleSignOut}>Sign Out</button>
         </div>
-      ) : ( // If user is not signed in
+      ) : (
         <div>
           <h2>Sign In / Create Account</h2>
           <form onSubmit={handleSignIn}>

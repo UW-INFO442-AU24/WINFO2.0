@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Document, Page } from 'react-pdf';
-import { ref, set, get, onValue, remove } from 'firebase/database';
+import { ref, set, onValue } from 'firebase/database';
 import { db } from '../index';
 import '../index.css';
 import ProgressBar from './ProgressBar';
@@ -17,21 +17,19 @@ const Book = ({ onPageChange, userId }) => {
     const bookmarksRef = ref(db, `users/${userId}/bookmarks`);
     const notesRef = ref(db, `users/${userId}/notes`);
 
-    // Real-time listener for progress data
+    // Load progress, bookmarks, and notes from Firebase
     const unsubscribeProgress = onValue(progressRef, (snapshot) => {
       if (snapshot.exists()) {
         setPageNumber(snapshot.val().page || 1);
       } else {
-        setPageNumber(1); // Reset to default
+        setPageNumber(1); // Default to page 1
       }
     });
 
-    // Real-time listener for bookmarks
     const unsubscribeBookmarks = onValue(bookmarksRef, (snapshot) => {
       setStarChecked(snapshot.val() || {});
     });
 
-    // Real-time listener for notes
     const unsubscribeNotes = onValue(notesRef, (snapshot) => {
       setNotes(snapshot.val() || '');
     });
@@ -43,11 +41,11 @@ const Book = ({ onPageChange, userId }) => {
     };
   }, [userId]);
 
-  function onDocumentLoadSuccess({ numPages }) {
+  const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-  }
+  };
 
-  function saveProgressToFirebase(page) {
+  const saveProgressToFirebase = (page) => {
     const progress = numPages ? (page / numPages) * 100 : 0;
 
     set(ref(db, `users/${userId}/progress`), {
@@ -55,55 +53,37 @@ const Book = ({ onPageChange, userId }) => {
       progress,
       timestamp: Date.now(),
     }).catch((error) => console.error('Error saving progress:', error));
-  }
+  };
 
-  function handlePageChange(page) {
+  const handlePageChange = (page) => {
     setPageNumber(page);
     saveProgressToFirebase(page);
     if (onPageChange) {
       onPageChange(page);
     }
-  }
+  };
 
-  function handleStarClick() {
-    const updatedStars = {
-      ...starChecked,
-      [pageNumber]: !starChecked[pageNumber],
-    };
+  const handleStarClick = () => {
+    const updatedStars = { ...starChecked, [pageNumber]: !starChecked[pageNumber] };
     setStarChecked(updatedStars);
 
     set(ref(db, `users/${userId}/bookmarks`), updatedStars).catch((error) =>
       console.error('Error saving bookmark:', error)
     );
-  }
+  };
 
-  function toggleNotebook() {
+  const toggleNotebook = () => {
     setShowNotebook(!showNotebook);
-  }
+  };
 
-  function handleSave() {
+  const handleSaveNotes = () => {
     set(ref(db, `users/${userId}/notes`), notes).catch((error) =>
       console.error('Error saving notes:', error)
     );
     toggleNotebook();
-  }
+  };
 
   const progress = numPages ? (pageNumber / numPages) * 100 : 0;
-
-  const resetBookData = async () => {
-    const progressRef = ref(db, `users/${userId}/progress`);
-    const bookmarksRef = ref(db, `users/${userId}/bookmarks`);
-    const notesRef = ref(db, `users/${userId}/notes`);
-
-    try {
-      await remove(progressRef);
-      await remove(bookmarksRef);
-      await remove(notesRef);
-      console.log('Book data reset successfully.');
-    } catch (error) {
-      console.error('Error resetting book data:', error);
-    }
-  };
 
   return (
     <div className="book-container">
@@ -147,7 +127,7 @@ const Book = ({ onPageChange, userId }) => {
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Write your notes here..."
           />
-          <button className="save-button" onClick={handleSave}>
+          <button className="save-button" onClick={handleSaveNotes}>
             Save
           </button>
         </div>

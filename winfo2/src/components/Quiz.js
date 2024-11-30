@@ -5,7 +5,7 @@ import Book from './Book';
 import '../index.css';
 
 const Quiz = ({ setWalletPoints, userId }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [score, setScore] = useState(0);
   const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
@@ -151,8 +151,7 @@ const Quiz = ({ setWalletPoints, userId }) => {
         setFeedbackMessage('Incorrect');
       }
       setSubmittedQuestions((prev) => new Set(prev).add(currentQ.id));
-
-      setWalletPoints(score + 1);
+      setWalletPoints(score + 1); // Update wallet points.
     }
   };
 
