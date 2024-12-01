@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import NavBar from './NavBar'; // Assuming NavBar is always visible
+import React, { useState, useEffect } from 'react';
+import NavBar from './NavBar';
+import { db } from '../index'; // Firebase import
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
-const Marketplace = ({ userPoints, setUserPoints }) => {
+const Marketplace = ({ userId, userPoints, setUserPoints, cart, setCart, inventory, setInventory }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all'); 
-  const [cart, setCart] = useState([]); 
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [addedItem, setAddedItem] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -25,49 +26,40 @@ const Marketplace = ({ userPoints, setUserPoints }) => {
     { id: 14, name: 'Orange T-shirt', category: 'tops', image: '/img/shirt.png', points: 12 }
   ];
 
-  // Handle Search
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  // Fetch user data (points, cart, inventory) from Firebase
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const docRef = doc(db, 'users', userId);
+      const docSnap = await getDoc(docRef);
 
-  // Handle Category Filter
-  const handleCategoryClick = (category) => {
-    setCategoryFilter(category);
-  };
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setUserPoints(data.points || 0);
+        setCart(data.cart || []);
+        setInventory(data.inventory || []);
+      }
+    };
 
-  // Add item to cart
-  const handleAddToCart = (item) => {
-    const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
-    if (userPoints - totalPointsSpent - item.points >= 0) {
-      setCart(prevCart => [...prevCart, item]);
-      setAddedItem(item.name);
-      setTimeout(() => setAddedItem(null), 2000);
-    } else {
-      alert("Not enough points!");
+    if (userId) {
+      fetchUserData();
     }
+  }, [userId, setCart, setInventory, setUserPoints]);
+
+  // Update Firestore data
+  const updateUserData = async () => {
+    const docRef = doc(db, 'users', userId);
+    await updateDoc(docRef, {
+      points: userPoints,
+      cart: cart,
+      inventory: inventory,
+    });
   };
 
-  // Remove item from cart
-  const handleRemoveFromCart = (itemId) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== itemId));
-  };
-
-  // Handle Checkout
-  const handleCheckout = () => {
-    const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
-    if (totalPointsSpent <= userPoints) {
-      setUserPoints(userPoints - totalPointsSpent); // Decrease the user's points
-      setCart([]); // Clear the cart after checkout
-      alert('Checkout successful!');
-    } else {
-      alert("You don't have enough points to checkout.");
+  useEffect(() => {
+    if (userId) {
+      updateUserData(); // Update user data whenever points, cart, or inventory changes
     }
-    setIsCartOpen(false); // Close cart modal after checkout
-  };
-
-  // Calculate the total points spent and remaining points
-  const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
-  const remainingPoints = userPoints - totalPointsSpent;
+  }, [userId, cart, inventory, userPoints]);
 
   // Filter items based on search and category
   const filteredItems = items.filter(item => {
@@ -76,43 +68,67 @@ const Marketplace = ({ userPoints, setUserPoints }) => {
     return matchesSearch && matchesCategory;
   });
 
+  const handleAddToCart = (item) => {
+    const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
+    if (userPoints - totalPointsSpent - item.points >= 0) {
+      setCart(prevCart => [...prevCart, item]);
+      setAddedItem(item.name);
+      setTimeout(() => setAddedItem(null), 2000); // Display a temporary success message
+    } else {
+      alert('Not enough points!');
+    }
+  };
+
+  const handleCheckout = () => {
+    const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
+    if (totalPointsSpent <= userPoints) {
+      setUserPoints(userPoints - totalPointsSpent); // Deduct points
+      setInventory(prevInventory => [...prevInventory, ...cart]);
+      setCart([]);
+      alert('Checkout successful!');
+    } else {
+      alert('You do not have enough points to checkout.');
+    }
+    setIsCartOpen(false); // Close the cart modal
+  };
+
+  const totalPointsSpent = cart.reduce((total, item) => total + item.points, 0);
+  const remainingPoints = userPoints - totalPointsSpent;
+
   return (
     <div>
       <NavBar />
       <h1>Marketplace</h1>
-
+      {/* Shop Header */}
       <header className="shop-header">
         <div className="cart-container" onClick={() => setIsCartOpen(true)}>
           <img className="cart-icon" src="/img/cart.png" alt="Shopping Cart" />
           <span className="cart-count">{cart.length}</span>
         </div>
-
         <div className="user-points">
           <h3>Available Points: {userPoints}</h3>
           <h4>Points Remaining: {remainingPoints}</h4>
         </div>
-
         <div className="search-container">
           <input
             type="text"
             className="search-input"
             placeholder="Search for items..."
             value={searchQuery}
-            onChange={handleSearchChange}
+            onChange={e => setSearchQuery(e.target.value)}
           />
-          <button className="search-button" onClick={() => setSearchQuery('')}>Search</button>
+          <button className="search-button" onClick={() => setSearchQuery('')}>Clear</button>
         </div>
       </header>
 
-      {addedItem && <div className="added-notification">{addedItem} added to cart!</div>}
-
+      {/* Main Content with Categories and Items */}
       <div className="main-content">
         <div className="categories">
           {['all', 'tops', 'bottoms', 'coats', 'shoes', 'accessories'].map(category => (
             <p
               key={category}
               className={`category-filter ${categoryFilter === category ? 'active' : ''}`}
-              onClick={() => handleCategoryClick(category)}
+              onClick={() => setCategoryFilter(category)}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </p>
@@ -124,15 +140,15 @@ const Marketplace = ({ userPoints, setUserPoints }) => {
             <ul className="items-displayed">
               {filteredItems.length > 0 ? (
                 filteredItems.map(item => (
-                  <li key={item.id} className="item" data-category={item.category}>
-                    <img className="purchase-item" src={item.image} alt={`Image of ${item.name}`} />
+                  <li key={item.id} className="item">
+                    <img className="purchase-item" src={item.image} alt={item.name} />
                     <span className="item-name">{item.name}</span>
                     <span className="item-points">{item.points} points</span>
                     <button
                       onClick={() => handleAddToCart(item)}
                       disabled={remainingPoints < item.points}
                     >
-                      +
+                      Add to Cart
                     </button>
                   </li>
                 ))
@@ -156,15 +172,10 @@ const Marketplace = ({ userPoints, setUserPoints }) => {
                     <img src={item.image} alt={item.name} style={{ width: '50px' }} />
                     <span className="item-name">{item.name}</span>
                     <span className="cart-points">{item.points} points</span>
-                    <button 
-                      className="remove-item" 
-                      onClick={() => handleRemoveFromCart(item.id)}>
-                      X
-                    </button>
                   </li>
                 ))
               ) : (
-                <li>Your cart is empty</li>
+                <li>Your cart is empty.</li>
               )}
             </ul>
             <div className="cart-total">

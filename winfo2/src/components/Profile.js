@@ -1,7 +1,31 @@
-import React from 'react';
-import NavBar from './NavBar'; // Assuming NavBar is always visible
+import React, { useEffect } from 'react';
+import NavBar from './NavBar';
+import '../index.css'; // Make sure to import your CSS file
+import { db } from '../index'; // Import Firestore configuration
+import { doc, getDoc } from 'firebase/firestore';
 
-const Profile = ({ userPoints }) => {
+const Profile = ({ userId, userPoints, setUserPoints, inventory, setInventory }) => {
+
+  // Fetch user data from Firebase
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const docRef = doc(db, 'users', userId); // Reference to the user document in Firebase
+      const docSnap = await getDoc(docRef);   // Fetch the document from Firestore
+
+      if (docSnap.exists()) {
+        const data = docSnap.data(); // Get user data
+        setUserPoints(data.points || 0); // Set user points from Firebase data (default to 0)
+        setInventory(data.inventory || []); // Set user inventory from Firebase data (default to empty array)
+      } else {
+        console.log("No such document!");
+      }
+    };
+
+    if (userId) {  // Only fetch user data if userId exists
+      fetchUserData();
+    }
+  }, [userId, setInventory, setUserPoints]); // Re-run the effect if userId, setInventory, or setUserPoints changes
+
   return (
     <div className="profile-page">
       <NavBar />
@@ -9,6 +33,8 @@ const Profile = ({ userPoints }) => {
         {/* Profile Image */}
         <img className="profile_IMG" src="/img/profile.png" alt="Character" />
         <h1 className="username">username</h1>
+        
+        {/* User points fetched from Firebase */}
         <p className="points">Points: {userPoints}</p>
 
         {/* Main Content: Student Info, Completed Books, Inventory */}
@@ -44,14 +70,17 @@ const Profile = ({ userPoints }) => {
           <div className="inventory">
             <h2>Inventory</h2>
             <ul className="inventory-items">
-              <li>
-                <img className="item-photo" src="/img/dress.png" alt="Bubblegum Pink Dress" />
-                <span className="item-name">Bubblegum Pink Dress</span>
-              </li>
-              <li>
-                <img className="item-photo" src="/img/crown.png" alt="Pink Crown" />
-                <span className="item-name">Pink Crown</span>
-              </li>
+              {/* Dynamic inventory items from Firebase */}
+              {inventory.length > 0 ? (
+                inventory.map((item, index) => (
+                  <li key={index}>
+                    <img className="item-photo" src={item.image} alt={item.name} />
+                    <span className="item-name">{item.name}</span>
+                  </li>
+                ))
+              ) : (
+                <li>Your inventory is empty.</li>
+              )}
             </ul>
           </div>
         </div>
@@ -61,3 +90,4 @@ const Profile = ({ userPoints }) => {
 };
 
 export default Profile;
+

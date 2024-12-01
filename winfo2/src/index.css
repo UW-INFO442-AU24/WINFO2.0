@@ -275,23 +275,19 @@ body {
     font-weight: bold;
 }
 
-
-/* NAV BAR STYLING */
-header {
-    background-color: rgb(212, 212, 212);
-}
-
+/* General Styles for NavBar */
 .navbar {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 10px 20px;
-    background-color: #D4D4D4;
+    background-color: #D4D4D4; /* Ensure consistent background color */
     width: 100%;
     position: relative;
     z-index: 10;
 }
 
+/* Adjust the navbar container to fill the width properly */
 .navbar .container-fluid {
     display: flex;
     justify-content: flex-start;
@@ -299,6 +295,7 @@ header {
     width: 100%;
 }
 
+/* Standardize Logo and Brand Section */
 .navbar .navbar-brand {
     display: flex;
     align-items: center;
@@ -310,6 +307,7 @@ header {
     height: 87px;
 }
 
+/* Nav Links */
 .navbar-nav {
     display: flex;
     gap: 15px;
@@ -358,14 +356,62 @@ header {
     font-size: 30px;
 }
 
-/* Responsive design for smaller screens */
+/* Consistent Responsive Design for smaller screens */
 @media (max-width: 992px) {
-    .main-content {
-        flex-direction: column;  /* Stack sections on smaller screens */
+    .navbar-nav {
+        flex-direction: column;
         align-items: center;
-        padding: 0;
+    }
+
+    .navbar-toggler {
+        display: block; /* Show hamburger on smaller screens */
+    }
+
+    .navbar .container-fluid {
+        flex-direction: column; /* Stack elements in a column */
+        align-items: center;
     }
 }
+
+/* Profile Page & Marketplace Page */
+.profile-page .navbar, .marketplace-page .navbar {
+    background-color: #D4D4D4; /* Ensure same background color */
+    padding: 10px 20px; /* Uniform padding */
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Same Styling for the Navbar items across both pages */
+.profile-page .navbar-nav, .marketplace-page .navbar-nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.profile-page .nav-link, .marketplace-page .nav-link {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
+    transition: background-color 0.3s ease;
+}
+
+.profile-page .nav-link:hover, .marketplace-page .nav-link:hover {
+    color: white;
+    background-color: #4f5152;
+}
+
+.profile-page .nav-link.active, .marketplace-page .nav-link.active {
+    color: white;
+    background-color: #4f5152;
+}
+
+
 
 /* Profile Page Styles (Scoped to .profile-page) */
 .profile-page {
