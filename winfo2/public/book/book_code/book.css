@@ -1,0 +1,225 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Times New Roman';
+  font: 15px;
+}
+
+footer {
+  background-color: rgb(255, 255, 255);
+  height: fit-content;
+  text-align: center;
+  font-size: 12px;
+}
+
+.copyright {
+  padding-top: 20px;
+}
+
+.names {
+  padding-bottom: 20px;
+  margin: 0;
+  font-size: 15px;
+}
+
+header {
+  background-color: rgb(212, 212, 212);
+}
+
+/* BOOK PAGE STYLING (HEADER) */
+.giver-header {
+  background-color: white;
+  border: 1px solid lightgray;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.giver-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  padding-left: 115px;
+}
+
+.giver-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s; 
+}
+
+.btn-icon:hover {
+  transform: scale(1.1); 
+}
+
+.star-checkbox {
+  display: none; 
+}
+
+.star-label {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s; 
+}
+
+.star-label:hover {
+  transform: scale(1.1); 
+}
+
+.star-checkbox:checked + .star-label .star-icon path {
+  fill: yellow; 
+}
+
+.star-icon path {
+  fill: none; 
+  stroke: #000; 
+  stroke-width: 2; 
+}
+
+/* BOOK PAGE STYLING (PAGES) */
+.book-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 40px;
+  padding-bottom: 10px;
+}
+
+.page {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  width: 40%;
+  height: 80vh; 
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .book-container {
+    flex-direction: column;
+    align-items: center; 
+    padding: 20px 100px;
+    padding-top: 40px;
+    padding-bottom: 10px;
+  }
+
+  .page {
+    width: 100%; 
+  }
+
+  .page:nth-child(2) {
+    display: none; 
+  }
+}
+
+/* BOOK PAGE STYLING (ARROW BUTTONS) */
+.arrow-btn {
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer;
+  position: fixed; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  z-index: 1000; 
+}
+
+.left-arrow {
+  left: 40px; 
+}
+
+.right-arrow {
+  right: 40px; 
+}
+
+.arrow-btn img {
+  width: 40px; 
+  height: auto; 
+  transition: transform 0.2s; 
+}
+
+.arrow-btn:hover img {
+  transform: scale(1.1); 
+}
+
+
+@media (max-width: 768px) {
+  .arrow-btn img {
+    width: 30px; 
+  }
+}
+
+/* BOOK PAGE STYLING (BACK BUTTON) */
+.back-button {
+  position: relative; 
+  margin-top: 20px; 
+  left: 40px; 
+  padding: 10px 20px;
+  color: black;
+  border: 1px solid;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  transform: scale(1.02); 
+}
+
+/* BOOK PAGE STYLING (SCROLL BAR) */
+
+/* NAV BAR STYLING */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.navbar-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.navbar-nav .nav-link {
+  color: black; 
+}
+
+.navbar-nav .nav-link:hover {
+  color: white; 
+}
+
+.navbar-nav .nav-link.active {
+  color: white; 
+}
+
+/* FOOTER STYLING */
+footer {
+  margin-top: 30px;
+  background-color: #f8f9fa;
+}
