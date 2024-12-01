@@ -1,16 +1,15 @@
 import React from 'react';
-import NavBar from './NavBar'; 
-import '../index.css'; // Make sure to import your CSS file
+import NavBar from './NavBar'; // Assuming NavBar is always visible
 
-const Profile = () => {
+const Profile = ({ userPoints }) => {
   return (
     <div className="profile-page">
-      <NavBar/>
+      <NavBar />
       <div className="profile-container">
         {/* Profile Image */}
         <img className="profile_IMG" src="/img/profile.png" alt="Character" />
         <h1 className="username">username</h1>
-        <p className="points">Points: 100</p>
+        <p className="points">Points: {userPoints}</p>
 
         {/* Main Content: Student Info, Completed Books, Inventory */}
         <div className="main-content">
