@@ -199,6 +199,18 @@ header {
     cursor: pointer;
 }
 
+/* Vertical Nav Bar Styling */
+.navbar-nav.vertical-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0; 
+}
+.navbar-nav.vertical-nav .nav-item {
+    text-align: center;
+    margin: 0; 
+}
+
 /* Hamburger menu button (for small screens) */
 .navbar-toggler {
     display: none;
@@ -272,6 +284,7 @@ header {
         align-items: center;
         padding: 20px;
         z-index: 15;
+        margin-top: 0; 
     }
   
     .navbar-nav.show {
@@ -281,6 +294,11 @@ header {
     .navbar-nav .nav-item {
         width: 100%;
         text-align: center;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 10px 20px;
+        text-align: left;
     }
 }
 
