@@ -183,6 +183,7 @@ body, html {
     display: flex;
     gap: 20px;
     align-items: center;
+    padding-right: 20px; 
 }
 
 .navbar-nav .nav-item {
@@ -345,8 +346,7 @@ body, html {
     .navbar-title {
         font-size: 30px; /* Adjust title size for smaller screens */
     }
-
-}
+} 
 
 /* home page */
 #header {
@@ -961,7 +961,18 @@ h1.about {
     display: flex;
     justify-content: flex-end; /* Align items to the right */
     align-items: center; /* Center align vertically */
-    width: auto;
+    width: 100px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 992px) {
+    .profile-btn {
+        display: none;
+    }
+
+    .profile_IMG_nav {
+        display: none;
+    }
 }
 
 /* footer */
