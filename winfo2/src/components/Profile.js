@@ -1,31 +1,156 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getDatabase, ref, get } from 'firebase/database';
+import { db } from '../'; // Firestore configuration
+import { doc, getDoc } from 'firebase/firestore';
+import { BeanHead } from 'beanheads';
+import '../index.css';
 import SignInOut from './SignInOut';
-import Book from './Book';
-import Quiz from './Quiz';
 
-// Utility function to sanitize email for Firebase paths
-const sanitizeEmail = (email) => email.replace(/[.#$[\]]/g, '_');
+const Profile = () => {
+  const [avatarCustomization, setAvatarCustomization] = useState(null);
+  const [walletPoints, setWalletPoints] = useState(null);
+  const [inventory, setInventory] = useState([]);
+  const [completedBooks, setCompletedBooks] = useState([]);
+  const [user, setUser] = useState(null);
 
-function Profile() {
-  const [user, setUser] = useState('guest'); // Default to guest
-
-  const handleSignIn = (email) => {
-    setUser(email); // Set the user to the signed-in email
+  const sanitizeUsername = (username) => {
+    return username.replace(/\./g, ',').replace(/@/g, '_at_');
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && storedUser !== 'undefined') {
+      setUser(storedUser);
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const sanitizedUser = sanitizeUsername(user);
+    const database = getDatabase();
+
+    // Fetch avatar customization data
+    const avatarRef = ref(database, `users/${sanitizedUser}/avatarCustomization`);
+    get(avatarRef)
+      .then((snapshot) => snapshot.exists() && setAvatarCustomization(snapshot.val()))
+      .catch((error) => console.error("Error fetching avatar customization: ", error));
+
+    // Fetch wallet points
+    const pointsRef = ref(database, `users/${sanitizedUser}/walletPoints`);
+    get(pointsRef)
+      .then((snapshot) => snapshot.exists() && setWalletPoints(snapshot.val()))
+      .catch((error) => console.error("Error fetching wallet points: ", error));
+
+    // Fetch user data from Firestore (inventory and completed books)
+    const fetchFirestoreData = async () => {
+      try {
+        const userRef = doc(db, 'users', sanitizedUser);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setInventory(data.inventory || []);
+          setCompletedBooks(data.completedBooks || []);
+          setWalletPoints(data.walletPoints || 0);
+        }
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+      }
+    };
+
+    fetchFirestoreData();
+  }, [user]);
 
   const handleSignOut = () => {
-    setUser('guest'); // Reset to guest on sign out
+    setUser(null);
+    localStorage.removeItem('user'); 
   };
 
-  const sanitizedUserId = user === 'guest' ? user : sanitizeEmail(user);
+  if (!user) {
+    return (
+      <div>
+        <SignInOut
+          onSignIn={(email) => {
+            setUser(email);  
+            localStorage.setItem('user', email);
+          }}
+          onSignOut={handleSignOut}
+        />
+      </div>
+    );
+  }
 
+  // If user is signed in, display profile information
   return (
-    <div>
-      <h1>Profile Page</h1>
-      <SignInOut user={user} onSignIn={handleSignIn} onSignOut={handleSignOut} />
+    <div className="profile-container">
+      {avatarCustomization ? (
+        <div className="profile_IMG">
+          <BeanHead {...avatarCustomization} mask={false} />
+        </div>
+      ) : (
+        <img className="profile_IMG" src="/book/book_images/user.png" alt="Character" />
+      )}
+      <h1 className="username">{user}</h1>
+      <p className="points">
+        Points: {walletPoints !== null ? walletPoints * 100 : 'Loading...'}
+      </p>
+      <div className="main-content">
+        <div className="student-info">
+          <p>Grade Level: 10</p>
+          <p>School: Springfield High</p>
+          <p>Teacher: Mr. Smith</p>
+          <p>StudentID: 123456</p>
+        </div>
+        <div className="completed-books">
+          <h2 className="profile">Completed Books</h2>
+          <ul className="books-list">
+            {completedBooks.length > 0 ? (
+              completedBooks.map((book, index) => (
+                <li key={index}>
+                  <img
+                    className="book-cover"
+                    src={book.image || '/img/default-book.png'}
+                    alt={book.title}
+                  />
+                  <span className="book-title-profile">{book.title}</span>
+                  <span className="book-author-profile">{book.author}</span>
+                  <span className="stars">⭐️⭐️⭐️⭐️⭐️</span>
+                </li>
+              ))
+            ) : (
+              <li>No completed books yet.</li>
+            )}
+          </ul>
+        </div>
+        <div className="inventory">
+          <h2 className="profile">Inventory</h2>
+          <ul className="inventory-items">
+            {inventory.length > 0 ? (
+              inventory.map((item, index) => (
+                <li key={index} className="inventory-item">
+                  <img
+                    className="item-photo"
+                    src={item.image || '/img/default-item.png'}
+                    alt={item.name}
+                  />
+                  <span className="item-name">{item.name}</span>
+                </li>
+              ))
+            ) : (
+              <li>Your inventory is empty.</li>
+            )}
+          </ul>
+        </div>
+      </div>
+      <div className="sign-out-button-container">
+        <button onClick={handleSignOut} className="sign-out-button">
+          Sign Out
+        </button>
+      </div>
     </div>
   );
-}
+};
 
 export default Profile;
-
